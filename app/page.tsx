@@ -1,9 +1,37 @@
+'use client'
 import WAppLogo from '@/app/ui/wapp-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { varela } from './ui/fonts';
+import { initialCoordinates, useCoordinates } from './contexts/coordinate-context';
+import { useEffect } from 'react';
+import { useNotification } from './contexts/notification-context';
 
 export default function Page() {
+  const {notify} = useNotification()
+  const {setCoordinates} = useCoordinates();
+  useEffect(() => {
+    function getLocation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            setCoordinates({ lat: latitude, lon: longitude });
+          },
+          (error) => {
+            console.error('Error getting location:', error.message);
+            setCoordinates(initialCoordinates);
+            notify(error.message, 'error');
+          },
+        );
+      } else {
+        console.log('Geolocation is not supported by this browser.');
+        notify('Geolocation is not supported by this browser.', 'inform');
+      }
+    }
+    getLocation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <main className="flex min-h-screen flex-col bg-gray-50 p-4">
       <div className="flex h-20 w-full shrink-0 items-end rounded-xl bg-gradient-to-br from-primary-500 via-[#F19C69] via-80% to-[#EB4D4B] p-2 shadow-md md:h-52">

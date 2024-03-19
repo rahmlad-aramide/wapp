@@ -13,7 +13,7 @@ export const fetchWeatherByCoordinate = async (
     return response.data;
   } catch (error: any) {
     console.error('Error fetching weather data:', error);
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
 export const fetchWeatherByCityName = async (
@@ -27,7 +27,7 @@ export const fetchWeatherByCityName = async (
     return response.data;
   } catch (error: any) {
     console.error('Error fetching weather data:', error);
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
 export const fetchForecastByCoordinate = async (
@@ -41,7 +41,7 @@ export const fetchForecastByCoordinate = async (
   } catch (error: any) {
     console.error('Error fetching forecast data:', error);
     console.log('Error fetching forecast data message:', error.message);
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
 export const fetchForecastByCityName = async (
@@ -55,6 +55,6 @@ export const fetchForecastByCityName = async (
   } catch (error: any) {
     console.error('Error fetching forecast data:', error);
     console.log('Error fetching forecast data message', error.message)
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };

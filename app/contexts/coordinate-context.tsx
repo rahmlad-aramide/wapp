@@ -9,7 +9,10 @@ import {
   useState,
 } from 'react';
 import { useNotification } from './notification-context';
-const initialCoordinates = { lat: null, lon: null };
+
+export const initialCoordinates = { lat: null, lon: null };
+// Default to lagos in case the user does not allow location.
+export const defaultCoordinates = { lat: 6.5244, lon: 3.3792 };
 interface Coordinates {
   lat: number | null;
   lon: number | null;
@@ -36,8 +39,8 @@ export function CoordinatesProvider({ children }: { children: ReactNode }) {
           },
           (error) => {
             console.error('Error getting location:', error.message);
-            setCoordinates(initialCoordinates);
-            notify(error.message, 'error');
+            setCoordinates(defaultCoordinates);
+            notify(error.message, 'inform');
           },
         );
       } else {
@@ -46,7 +49,7 @@ export function CoordinatesProvider({ children }: { children: ReactNode }) {
       }
     }
     getLocation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
