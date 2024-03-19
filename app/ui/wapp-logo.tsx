@@ -4,10 +4,10 @@ import { varela } from '@/app/ui/fonts';
 export default function WAppLogo() {
   return (
     <div
-      className={`${varela.className} flex w-full flex-col items-start space-x-2 leading-none text-white`}
+      className={`${varela.className} flex w-full items-center space-x-2 leading-none text-white md:flex-col md:items-start md:space-x-0 lg:space-x-2`}
     >
-      <CloudIcon className="h-12 w-12 rounded-lg bg-white p-1.5 ml-2 mb-1.5 text-primary-500" />
-      <p className="text-[44px] font-semibold">WApp</p>
+      <CloudIcon className="ml-2 h-12 w-12 rounded-lg bg-white p-1.5 text-primary-500 md:mb-1.5 md:ml-0 md:scale-75 lg:ml-2 lg:scale-100" />
+      <p className="block text-[44px] font-semibold md:hidden lg:block">WApp</p>
     </div>
   );
 }

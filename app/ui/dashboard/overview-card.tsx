@@ -6,9 +6,10 @@ import { getCountryName } from '@/app/lib/utils';
 import CurrentTemperature from './current-temperature';
 import { useLoading } from '@/app/contexts/loading-context';
 import { OverviewCardSkeleton } from '../skeletons';
+import { CurrentWeatherResponse } from '@/app/lib/types';
 
-export default function OverviewCard() {
-  const { weatherData } = useWeatherData();
+export default function OverviewCard({weatherData}: {weatherData: CurrentWeatherResponse|null}) {
+  // const { weatherData } = useWeatherData();
   const { loading } = useLoading();
 
   const name = weatherData?.name;
@@ -18,7 +19,7 @@ export default function OverviewCard() {
   const description = weatherData?.weather[0].description || '';
   const main = weatherData?.weather[0]?.main || '';
   const altText =
-    typeof main === 'string' ? main : 'Current weather condition icon';
+    typeof main === 'string' && main ? main : 'Current weather condition icon';
 
   return (
     <>

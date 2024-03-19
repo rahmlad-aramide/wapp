@@ -2,11 +2,10 @@
 import { useUnits } from '@/app/contexts/units-context';
 
 const UnitTab: React.FC = () => {
-    const {units: selectedUnit, toggleUnits} = useUnits();
-
+  const { units: selectedUnit, toggleUnits } = useUnits();
 
   return (
-    <div className="relative flex h-fit rounded-lg bg-gray-200 py-1 transition duration-200">
+    <div className="relative flex h-fit w-full min-w-[300px] justify-between rounded-lg bg-gray-200 py-1 transition duration-200 md:w-fit">
       <div
         className={`absolute top-1 h-[calc(100%_-_0.5rem)] rounded-md bg-white transition-all duration-300 ease-in-out ${
           selectedUnit === 'metric'
@@ -15,7 +14,7 @@ const UnitTab: React.FC = () => {
         }`}
       ></div>
       <button
-        className={`relative z-10 rounded-lg px-4 py-2 text-sm font-medium ${
+        className={`relative z-10 w-full rounded-lg px-4 py-2 text-sm font-medium md:w-1/2 ${
           selectedUnit === 'metric'
             ? 'text-gray-900'
             : 'text-gray-800 hover:text-gray-700'
@@ -25,7 +24,7 @@ const UnitTab: React.FC = () => {
         Metric: °C, m/s
       </button>
       <button
-        className={`relative z-10 rounded-lg px-4 py-2 text-sm font-medium ${
+        className={`relative z-10 w-full rounded-lg px-4 py-2 text-sm font-medium md:w-1/2 ${
           selectedUnit === 'imperial'
             ? 'text-gray-900'
             : 'text-gray-800 hover:text-gray-700'

@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <UnitsProvider>
                 <LoadingProvider>
                   <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-                    <div className="w-full flex-none md:w-64">
+                    <div className="w-full flex-none md:w-20 lg:w-56">
                       <SideNav />
                     </div>
                     <div className="flex-grow overflow-y-auto bg-gray-50 p-4 md:p-8">

@@ -1,22 +1,15 @@
 'use client';
-import { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { unixToIsoString } from '@/app/lib/utils';
-import { ForecastResponse } from '@/app/lib/types';
-import { useForecastData } from '@/app/contexts/forecast-data-context';
-import { useCoordinates } from '@/app/contexts/coordinate-context';
-import { fetchForecastByCoordinate } from '@/app/lib/data';
-import { useNotification } from '@/app/contexts/notification-context';
 import { useLoading } from '@/app/contexts/loading-context';
 import { TemperatureAreaChartSkeleton } from '../skeletons';
+import { ForecastResponse } from '@/app/lib/types';
+import { useEffect, useState } from 'react';
 
-const TemperatureChart: React.FC = () => {
-  const { notify } = useNotification();
-  const { loading, setLoading } = useLoading();
-  const { forecastData, setForecastData } = useForecastData();
-  const {
-    coordinates: { lat, lon },
-  } = useCoordinates();
+const TemperatureAreaChart = ({forecastData}:{forecastData : ForecastResponse|null}) => {
+  const { loading } = useLoading();
+  const [isClient, setIsClient] = useState(false);
+  // const { forecastData } = useForecastData();
 
   const list = forecastData?.list || [];
   const series = [
@@ -61,27 +54,12 @@ const TemperatureChart: React.FC = () => {
     colors: ['#EC6E46'],
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      try {
-        const response: ForecastResponse | null =
-          await fetchForecastByCoordinate(lat, lon);
-        setForecastData(response);
-      } catch (error: any) {
-        notify(error.message, 'error');
-        console.error('Error fetching forecast data', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lon]);
-
+  useEffect(()=>{
+    setIsClient(true);
+  },[])
   return (
     <>
-      {loading ? (
+      {loading || !isClient ? (
         <TemperatureAreaChartSkeleton />
       ) : (
         <div className="w-full p-6 pb-2">
@@ -97,4 +75,4 @@ const TemperatureChart: React.FC = () => {
   );
 };
 
-export default TemperatureChart;
+export default TemperatureAreaChart;

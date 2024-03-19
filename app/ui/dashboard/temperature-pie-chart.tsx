@@ -1,8 +1,9 @@
 'use client';
 import { useLoading } from '@/app/contexts/loading-context';
-import { useWeatherData } from '@/app/contexts/weather-data-context';
 import ReactApexChart from 'react-apexcharts';
-import { TemperatureAreaChartSkeleton } from '../skeletons';
+import { TemperaturePieChartSkeleton } from '../skeletons';
+import { CurrentWeatherResponse } from '@/app/lib/types';
+import { useEffect, useState } from 'react';
 
 const legend = {
   'series-1': 'Current',
@@ -10,9 +11,13 @@ const legend = {
   'series-3': 'Maximum',
   'series-4': 'Feels Like',
 };
-const TemperaturePieChart: React.FC = () => {
-  const { weatherData } = useWeatherData();
+const TemperaturePieChart = ({
+  weatherData,
+}: {
+  weatherData: CurrentWeatherResponse | null;
+}) => {
   const { loading } = useLoading();
+  const [isClient, setIsClient] = useState(false);
   const temp = weatherData?.main.temp || 0;
   const temp_max = weatherData?.main.temp_max || 0;
   const temp_min = weatherData?.main.temp_min || 0;
@@ -58,12 +63,16 @@ const TemperaturePieChart: React.FC = () => {
     colors: ['#F19C69', '#EC6E46', '#EB4D4B', '#dc3545'],
   };
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
-      {loading ? (
-        <TemperatureAreaChartSkeleton />
+      {loading || !isClient ? (
+        <TemperaturePieChartSkeleton />
       ) : (
-        <section className="-ml-2 mt-4 flex w-full">
+        <section className="-ml-2 mt-4 flex min-h-[120px] w-full">
           <ReactApexChart
             options={options}
             series={series}

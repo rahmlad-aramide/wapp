@@ -31,12 +31,12 @@ export default function NavLinks() {
             key={link.name}
             href={link.href}
             className={clsx(
-              'hover:text-primary-500 hover:bg-primary-500/10 flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3',
-              { 'text-primary-500 bg-primary-500/10': pathname === link.href },
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-primary-500/10 hover:text-primary-500 md:flex-none md:justify-start md:p-2 md:px-3',
+              { 'bg-primary-500/10 text-primary-500': pathname === link.href },
             )}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <LinkIcon className="w-6 md:mx-auto lg:mx-0" />
+            <p className="hidden lg:block">{link.name}</p>
           </Link>
         );
       })}

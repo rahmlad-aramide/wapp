@@ -139,6 +139,7 @@ export interface UnitsContextType {
 }
 export interface SunCardProps {
   title: 'Sunrise' | 'Sunset';
+  weatherData: CurrentWeatherResponse|null;
 }
 
 export interface SunCardIconProps {

@@ -42,7 +42,7 @@ export function HeadingSkeleton() {
 }
 export function TemperatureAreaChartSkeleton() {
   return (
-    <div className={`${shimmer} relative w-auto overflow-hidden p-6`}>
+    <div className={`${shimmer} relative w-full overflow-hidden p-6`}>
       <div className="flex justify-between">
         <div>
           <div className="mb-2 h-5 w-36 rounded bg-gray-200" />
@@ -59,7 +59,9 @@ export function TemperatureAreaChartSkeleton() {
 
 export function TemperaturePieChartSkeleton() {
   return (
-    <div className={`${shimmer} relative mx-auto flex max-w-[280px] space-x-2`}>
+    <div
+      className={`${shimmer} relative ml-2 lg:mx-auto mt-4 flex max-w-[280px] space-x-2`}
+    >
       <div className="mr-4 w-1/2 max-w-[100px] rounded-full bg-gray-200 p-4">
         <div className="mx-auto aspect-square w-full rounded-full bg-white"></div>
       </div>
@@ -121,6 +123,7 @@ export function SunCardSkeleton() {
 export function SunCardsSkeleton() {
   return (
     <>
+      <div className={`${shimmer} mt-4 h-4 w-1/2 bg-gray-200`}></div>
       <SunCardSkeleton />
       <SunCardSkeleton />
     </>
@@ -141,7 +144,6 @@ export default function DashboardSkeleton() {
         <section className="relative col-span-4 h-full w-full overflow-x-hidden rounded-lg bg-white p-4 shadow-lg">
           <OverviewCardSkeleton />
           <TemperaturePieChartSkeleton />
-          <div className={`${shimmer} mt-4 h-4 bg-gray-200`}></div>
           <SunCardsSkeleton />
         </section>
       </section>

@@ -8,10 +8,10 @@ export default function SideNav() {
     <div className="flex h-full flex-col border-r bg-gray-50">
       <div className="m-2 mb-3 flex h-20 justify-start rounded-md bg-gradient-to-br from-primary-500 via-[#F19C69] to-[#EB4D4B] p-2 md:h-fit">
         <Link
-          className="flex h-full w-full items-end justify-start rounded border border-white/50 bg-white/30 py-4 backdrop-blur-md"
+          className="flex h-full w-full items-end justify-start rounded border border-white/50 bg-white/30 py-2 backdrop-blur-md md:py-4"
           href="/"
         >
-          <div className="flex px-2">
+          <div className="flex lg:px-2">
             <WAppLogo />
           </div>
         </Link>
@@ -25,8 +25,8 @@ export default function SideNav() {
             'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-primary-500/10 hover:text-primary-500 md:flex-none md:justify-start md:p-2 md:px-3'
           }
         >
-          <ArrowUturnLeftIcon className="w-6" />
-          <p className="hidden md:block">Return</p>
+          <ArrowUturnLeftIcon className="w-6 md:mx-auto lg:mx-0" />
+          <p className="hidden lg:block">Return</p>
         </Link>
       </div>
     </div>

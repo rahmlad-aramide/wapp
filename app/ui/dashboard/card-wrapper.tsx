@@ -1,20 +1,13 @@
 'use client';
 import { Card } from './cards';
-import { useCoordinates } from '@/app/contexts/coordinate-context';
-import { useEffect } from 'react';
-import { CurrentWeatherResponse } from '@/app/lib/types';
-import { fetchWeatherByCoordinate } from '@/app/lib/data';
 import { useWeatherData } from '@/app/contexts/weather-data-context';
-import { useNotification } from '@/app/contexts/notification-context';
 import { useLoading } from '@/app/contexts/loading-context';
+import { CurrentWeatherResponse } from '@/app/lib/types';
+import { CardsSkeleton } from '../skeletons';
 
-export default function CardWrapper() {
-  const { notify } = useNotification();
-  const { loading, setLoading } = useLoading();
-  const { weatherData, setWeatherData } = useWeatherData();
-  const {
-    coordinates: { lat, lon },
-  } = useCoordinates();
+export default function CardWrapper({weatherData}:{weatherData: CurrentWeatherResponse|null}) {
+  const { loading } = useLoading();
+  // const { weatherData } = useWeatherData();
 
   const main = weatherData?.main;
   const temp = main?.temp || 0;
@@ -23,28 +16,10 @@ export default function CardWrapper() {
   const wind = weatherData?.wind;
   const speed = wind?.speed || 0;
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const response: CurrentWeatherResponse | null =
-          await fetchWeatherByCoordinate(lat, lon);
-        setWeatherData(response);
-      } catch (error: any) {
-        notify(error.message, 'error');
-        console.error('Error fetching weather data', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lon]);
-
   return (
     <>
       {loading ? (
-        <CardWrapper />
+        <CardsSkeleton />
       ) : (
         <div className="grid gap-6 sm:grid-cols-2">
           <Card title="Temperature" value={temp} type="temperature" />

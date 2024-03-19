@@ -7,7 +7,7 @@ interface LoadingContextType {
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
 export function LoadingProvider({children}: {children: ReactNode}){
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     return (
         <LoadingContext.Provider value={{loading, setLoading}}>{children}</LoadingContext.Provider>

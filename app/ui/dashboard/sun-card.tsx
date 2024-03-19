@@ -8,12 +8,11 @@ import {
   SunCardTimeProps,
 } from '@/app/lib/types';
 import { unixTo12HourTime, unixToTimeSince } from '@/app/lib/utils';
-import { useWeatherData } from '@/app/contexts/weather-data-context';
 import { useLoading } from '@/app/contexts/loading-context';
-import { SunCardsSkeleton } from '../skeletons';
+import { SunCardSkeleton } from '../skeletons';
 
-function SunCard({ title = 'Sunrise' }: SunCardProps) {
-  const { weatherData } = useWeatherData();
+function SunCard({ title = 'Sunrise', weatherData }: SunCardProps) {
+  // const { weatherData } = useWeatherData();
   const { loading } = useLoading();
   const iconMap: SunCardIconProps = {
     Sunrise: sunrise,
@@ -27,7 +26,7 @@ function SunCard({ title = 'Sunrise' }: SunCardProps) {
   return (
     <>
       {loading ? (
-        <SunCardsSkeleton />
+        <SunCardSkeleton />
       ) : (
         <section className="bg-gradient col-span-4 mb-2 mt-2.5 h-fit w-full rounded-lg bg-gradient-to-br from-primary-500 via-[#F19C69] via-40% to-[#EB4D4B] p-2 shadow-lg">
           <div className="flex items-center justify-between rounded border border-white/50 bg-white/30 px-3 py-2 text-gray-800">
