@@ -1,0 +1,30 @@
+:root {
+    background: #e9f0f1;
+    nav: #eef2f4;
+    grad-start: #1d365e;
+    grad-end: #2e4e8c;
+    prog-bar: #8eaeea;
+    primary-500: #4474e6;
+    text: #040416;
+}
+
+:new-root {
+    background: #fcefe9;
+    nav: #fdf5f2;
+    grad-start: #984538;
+    grad-end: #b65e4c;
+    prog-bar: #f2b198;
+    primary-500: #ec6e4c;
+}
+
+:dark {
+    background: #040416;
+    nav: #23241c;
+    grad-start: #1d365e;
+    grad-end: #2e4e8c;
+    prog-bar: #8eaeea;
+    primary-500: #8d6404;
+    text: #dfc69d;
+    text-primary-500: #8d6404;
+
+}
