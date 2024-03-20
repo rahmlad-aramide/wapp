@@ -1,7 +1,5 @@
-import WeatherMap from "./weather-map";
+import WeatherMap from './weather-map';
 
-export default async function Page () {
-  return (
-    <div><WeatherMap /></div>
-  )
+export default async function Page() {
+  return <WeatherMap />;
 }

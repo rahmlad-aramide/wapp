@@ -45,10 +45,10 @@ const WeatherMap: React.FC = () => {
   }, [layerType]);
 
   return (
-    <div>
-      <div className="mb-4 flex flex-row space-x-4">
+    <section className="flex w-full flex-col">
+      <div className="mb-4 flex w-full flex-row flex-wrap items-start">
         <button
-          className={`px-4 py-2 ${
+          className={`mb-2 flex px-4 py-2 mr-2 ${
             layerType === 'clouds_new'
               ? 'bg-primary-500 text-white'
               : 'bg-gray-200'
@@ -58,7 +58,7 @@ const WeatherMap: React.FC = () => {
           Clouds
         </button>
         <button
-          className={`px-4 py-2 ${
+          className={`mb-2 flex px-4 py-2 mr-2 ${
             layerType === 'precipitation_new'
               ? 'bg-primary-500 text-white'
               : 'bg-gray-200'
@@ -68,7 +68,7 @@ const WeatherMap: React.FC = () => {
           Precipitation
         </button>
         <button
-          className={`px-4 py-2 ${
+          className={`mb-2 flex px-4 py-2 mr-2 ${
             layerType === 'pressure_new'
               ? 'bg-primary-500 text-white'
               : 'bg-gray-200'
@@ -78,7 +78,7 @@ const WeatherMap: React.FC = () => {
           Sea Level Pressure
         </button>
         <button
-          className={`px-4 py-2 ${
+          className={`mb-2 flex px-4 py-2 mr-2 ${
             layerType === 'wind_new'
               ? 'bg-primary-500 text-white'
               : 'bg-gray-200'
@@ -88,7 +88,7 @@ const WeatherMap: React.FC = () => {
           Wind Speed
         </button>
         <button
-          className={`px-4 py-2 ${
+          className={`mb-2 flex px-4 py-2 mr-2 ${
             layerType === 'temp_new'
               ? 'bg-primary-500 text-white'
               : 'bg-gray-200'
@@ -99,7 +99,7 @@ const WeatherMap: React.FC = () => {
         </button>
       </div>
       <div ref={mapRef} className="relative h-screen w-full"></div>;
-    </div>
+    </section>
   );
 };
 

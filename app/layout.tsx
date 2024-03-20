@@ -7,8 +7,8 @@ export const metadata: Metadata = {
     template: '%s | WApp Dashboard',
     default: 'WApp Dashboard',
   },
-  description: 'Weather App Dashboard project developed by Abdrahman Oladimeji.',
-  metadataBase: new URL('https://linkedin.com/in/rahmlad'),
+  description: 'A Next.js weather application that integrates the OpenWeatherMap API and open layer to display real-time weather data on cards, charts and maps. Developed by Abdrahman Oladimeji',
+  metadataBase: new URL('https://r-wapp.vercel.app'),
 };
 export default function RootLayout({
   children,

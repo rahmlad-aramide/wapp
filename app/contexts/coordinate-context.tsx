@@ -5,7 +5,6 @@ import {
   SetStateAction,
   createContext,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 import { useNotification } from './notification-context';
