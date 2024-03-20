@@ -10,12 +10,12 @@ import {
 } from 'react';
 import { useNotification } from './notification-context';
 
-export const initialCoordinates = { lat: null, lon: null };
-// Default to lagos in case the user does not allow location.
+export const initialCoordinates = { lat: undefined, lon: undefined };
+// Default to Lagos in case the user does not allow location.
 export const defaultCoordinates = { lat: 6.5244, lon: 3.3792 };
 interface Coordinates {
-  lat: number | null;
-  lon: number | null;
+  lat: number | undefined;
+  lon: number | undefined;
 }
 interface CoordinatesContextType {
   coordinates: Coordinates;
@@ -26,31 +26,8 @@ const CoordinatesContext = createContext<CoordinatesContextType | undefined>(
 );
 
 export function CoordinatesProvider({ children }: { children: ReactNode }) {
-  const { notify } = useNotification();
   const [coordinates, setCoordinates] =
     useState<Coordinates>(initialCoordinates);
-  useEffect(() => {
-    function getLocation() {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords;
-            setCoordinates({ lat: latitude, lon: longitude });
-          },
-          (error) => {
-            console.error('Error getting location:', error.message);
-            setCoordinates(defaultCoordinates);
-            notify(error.message, 'inform');
-          },
-        );
-      } else {
-        console.log('Geolocation is not supported by this browser.');
-        notify('Geolocation is not supported by this browser.', 'inform');
-      }
-    }
-    getLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <CoordinatesContext.Provider value={{ coordinates, setCoordinates }}>

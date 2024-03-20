@@ -2,15 +2,16 @@
 import { inter } from '@/app/ui/fonts';
 import 'react-select-search/style.css';
 import { useEffect, useState } from 'react';
-import DashboardSkeleton, {
-  shimmer,
-} from '@/app/ui/skeletons';
+import DashboardSkeleton, { shimmer } from '@/app/ui/skeletons';
 import Heading from '@/app/ui/dashboard/heading';
 import CardWrapper from '@/app/ui/dashboard/card-wrapper';
 import SunCard from '@/app/ui/dashboard/sun-card';
 import OverviewCard from '@/app/ui/dashboard/overview-card';
 import { useLoading } from '@/app/contexts/loading-context';
-import { CurrentWeatherResponse, ForecastResponse } from '@/app/lib/types';
+import {
+  CurrentWeatherResponse,
+  ForecastResponse,
+} from '@/app/lib/types';
 import {
   fetchForecastByCityName,
   fetchForecastByCoordinate,
@@ -38,89 +39,84 @@ export default function OverviewContent() {
   );
   const {
     coordinates: { lat, lon },
+    setCoordinates,
   } = useCoordinates();
   const { notify } = useNotification();
 
-  useEffect(() => {
-    setIsClient(true)
-    async function fetchData() {
-      const queries = searchParams.get('q')?.toString();
-      if (queries) {
-        try {
-          const responseWeather = await fetchWeatherByCityName(queries);
-          const responseForecast = await fetchForecastByCityName(queries);
-          setWeatherData(responseWeather);
-          setForecastData(responseForecast);
-          setLoading(false);
-        } catch (error: any) {
-          console.error(error);
-          notify(error.message, 'error');
-        } finally {
-          setLoading(false);
-        }
-      } else if (lat && lon) {
-        try {
-          const forecastResponse: ForecastResponse | null =
-            await fetchForecastByCoordinate(lat, lon);
-          const weatherResponse: CurrentWeatherResponse | null =
-            await fetchWeatherByCoordinate(lat, lon);
-          setForecastData(forecastResponse);
-          setWeatherData(weatherResponse);
-        } catch (error: any) {
-          notify(error.message, 'error');
-          console.error('Error fetching forecast data', error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        try {
-          const forecastResponse: ForecastResponse | null =
-            await fetchForecastByCoordinate(
-              defaultCoordinates.lat,
-              defaultCoordinates.lon,
-            );
-          const weatherResponse: CurrentWeatherResponse | null =
-            await fetchWeatherByCoordinate(
-              defaultCoordinates.lat,
-              defaultCoordinates.lon,
-            );
-          setForecastData(forecastResponse);
-          setWeatherData(weatherResponse);
-        } catch (error: any) {
-          notify(error.message, 'error');
-          console.error('Error fetching forecast data', error);
-        } finally {
-          setLoading(false);
-        }
-      }
+  async function fetchData(lat?: number, lon?: number) {
+    const query = searchParams.get('q')?.toString();
+    setLoading(true);
+    try {
+      const weatherPromise =
+        lat && lon
+          ? fetchWeatherByCoordinate(lat, lon)
+          : query
+          ? fetchWeatherByCityName(query)
+          : null;
+      const forecastPromise =
+        lat && lon
+          ? fetchForecastByCoordinate(lat, lon)
+          : query
+          ? fetchForecastByCityName(query)
+          : null;
+      const [weatherResponse, forecastResponse] = await Promise.all([
+        weatherPromise,
+        forecastPromise,
+      ]);
+      setWeatherData(weatherResponse);
+      setForecastData(forecastResponse);
+    } catch (error: any) {
+      console.error('Error fetching data:', error);
+      notify(error.message, 'error');
+    } finally {
       setLoading(false);
     }
-    fetchData();
+  }
+
+  useEffect(() => {
+    setIsClient(true);
+    function getLocation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setCoordinates({ lat: latitude, lon: longitude });
+            console.log('in get location', latitude, longitude);
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            console.log('in get location error', defaultCoordinates);
+            setCoordinates(defaultCoordinates);
+            notify(error.message, 'inform');
+          },
+        );
+      } else {
+        console.log('Geolocation is not supported by this browser.');
+        notify('Geolocation is not supported by this browser.', 'inform');
+      }
+    }
+    getLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  useEffect(() => {
+    if (lat != null && lon != null) {
+      console.log('in Effect', lat, lon);
+      fetchData(lat, lon);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lon]);
 
   const searchWeather = async () => {
-    const queries = searchParams.get('q')?.toString();
-    if (queries) {
-      try {
-        setLoading(true);
-        const responseWeather = await fetchWeatherByCityName(queries);
-        const responseForecast = await fetchForecastByCityName(queries);
-        setWeatherData(responseWeather);
-        setForecastData(responseForecast);
-      } catch (error: any) {
-        console.error(error);
-        notify(error.message, 'error');
-      } finally {
-        setLoading(false);
-      }
+    const query = searchParams.get('q')?.toString();
+    if (query) {
+      await fetchData();
     } else {
       notify('Please enter a city to search', 'warn');
-      setLoading(false);
     }
   };
 
-  if(!isClient) return <DashboardSkeleton />
+  if (!isClient) return <DashboardSkeleton />;
 
   return (
     <main>

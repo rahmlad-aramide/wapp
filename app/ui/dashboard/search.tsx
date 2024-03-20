@@ -75,7 +75,7 @@ export default function Search({
       />
       <MagnifyingGlassIcon className="absolute left-2 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
       <button
-        disabled={!searchParams.get('q')?.toString() || loading || searching}
+        disabled={loading || searching}
         type="submit"
         onClick={searchWeather}
         className="absolute right-1.5 top-1/2 h-fit w-16 -translate-y-1/2 rounded bg-gray-200 p-0.5 text-gray-500 disabled:cursor-not-allowed peer-focus:bg-primary-500 peer-focus:text-white"
