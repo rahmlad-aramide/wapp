@@ -1,4 +1,5 @@
 import { StaticImageData } from 'next/image';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface CurrentWeatherResponse {
   coord: CurrentWeatherCoord;
@@ -135,6 +136,14 @@ export type WeatherType = 'temperature' | 'wind' | 'pressure' | 'humidity';
 export interface UnitsContextType {
   units: Units;
   toggleUnits: () => void;
+}
+export interface HeadingProps {
+  searchWeather: () => void;
+  searching: boolean;
+  setSearching: Dispatch<SetStateAction<boolean>>; 
+}
+export interface SearchProps extends HeadingProps {
+placeholder: string;
 }
 export interface SunCardProps {
   title: 'Sunrise' | 'Sunset';

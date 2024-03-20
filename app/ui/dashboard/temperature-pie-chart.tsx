@@ -72,7 +72,7 @@ const TemperaturePieChart = ({
       {loading || !isClient ? (
         <TemperaturePieChartSkeleton />
       ) : (
-        <section className="-ml-2 mt-4 flex min-h-[120px] w-full">
+        <section className="-ml-2 mt-4 flex min-h-[120px] w-full min-w-[300px]">
           <ReactApexChart
             options={options}
             series={series}

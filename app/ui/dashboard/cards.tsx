@@ -6,10 +6,7 @@ import temperature from '@/app/ui/icons/temperature.png';
 import pressure from '@/app/ui/icons/pressure.png';
 import humidity from '@/app/ui/icons/humidity.png';
 import wind from '@/app/ui/icons/wind.png';
-import {
-  getFinalUnit,
-  getFinalValue,
-} from '@/app/lib/utils';
+import { getFinalUnit, getFinalValue } from '@/app/lib/utils';
 import { WeatherType } from '@/app/lib/types';
 
 const iconMap = {
@@ -32,23 +29,23 @@ export function Card({
   const iconSrc = iconMap[type];
 
   return (
-    <div className="flex rounded-lg bg-white p-2 shadow-lg md:px-6">
+    <div className="flex justify-center rounded-lg bg-white p-2 shadow-lg md:justify-start md:px-6">
       {iconSrc ? (
         <Image
           src={iconSrc}
           width={64}
           height={64}
           alt={type}
-          className="my-auto h-16 w-16"
+          className="my-auto h-16 w-16 md:h-12 md:w-12 lg:h-16 lg:w-16"
           loading="lazy"
           priority={false}
         />
       ) : null}
-      <div className="ml-8 flex flex-col items-start justify-center py-8">
-        <h3 className="mb-2 text-sm font-medium text-gray-800">{title}</h3>
+      <div className="ml-8 flex flex-col items-start justify-center py-8 md:ml-4 lg:ml-8">
+        <h3 className="mb-2 text-sm font-medium text-gray-800 whitespace-nowrap">{title}</h3>
         <p
           className={`${inter.className}
-        truncate rounded-xl text-3xl font-semibold`}
+        truncate rounded-xl text-3xl font-semibold md:text-xl lg:text-3xl`}
         >
           {getFinalValue(type, value, units)}
           {getFinalUnit(type, units)}

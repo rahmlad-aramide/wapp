@@ -7,25 +7,25 @@ import {
   fetchForecastByCityName,
   fetchWeatherByCityName,
 } from '@/app/lib/data';
+import { SearchProps } from '@/app/lib/types';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export default function Search({
   placeholder,
   searchWeather,
-}: {
-  placeholder: string;
-  searchWeather: () => void;
-}) {
+  searching,
+  setSearching,
+}: SearchProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const { notify } = useNotification();
   const { setForecastData } = useForecastData();
   const { setWeatherData } = useWeatherData();
-  const { loading, setLoading } = useLoading();
-  const [searching, setSearching] = useState(false);
+  const { loading, setLoading } = useLoading();const queries = searchParams.get('q')?.toString();
+  // const [searching, setSearching] = useState(false);
 
   const handleSearch = (term: string) => {
     const params = new URLSearchParams(searchParams);
@@ -39,7 +39,6 @@ export default function Search({
 
   useEffect(() => {
     async function fetchData() {
-      const queries = searchParams.get('q')?.toString();
       if (queries) {
         setLoading(true);
         setSearching(true);
@@ -48,9 +47,17 @@ export default function Search({
           const responseForecast = await fetchForecastByCityName(queries);
           setWeatherData(responseWeather);
           setForecastData(responseForecast);
-        } catch (error: any) {
-          console.error(error);
-          notify(error.message, 'error');
+        } catch (error: Error | any) {
+          let errorMessage = 'An error occurred.';
+          if (!error.response) {
+            errorMessage =
+              'Network error. Please check your internet connection.';
+          } else if (error.response && error.response.status >= 400) {
+            errorMessage = `Error fetching data: ${error.response.statusText}`;
+          } else {
+            console.error('Unexpected error:', error);
+          }
+          notify(errorMessage, 'error');
         } finally {
           setLoading(false);
           setSearching(false);
@@ -62,7 +69,7 @@ export default function Search({
   }, []);
 
   return (
-    <form className="relative flex w-full flex-shrink-0 md:w-auto">
+    <form onSubmit={e=>{e.preventDefault(); searchWeather()}} className="relative flex w-full flex-shrink-0 md:w-auto">
       <label htmlFor="search" className="sr-only">
         Search
       </label>
@@ -70,15 +77,14 @@ export default function Search({
         className="peer block w-full rounded-md border-2 border-gray-300 bg-transparent py-2 pl-7 pr-16 text-sm outline-2 placeholder:text-gray-500 focus:border-primary-500 md:w-auto"
         placeholder={placeholder}
         onChange={(e) => handleSearch(e.target.value)}
-        defaultValue={searchParams.get('q')?.toString()}
+        defaultValue={queries}
         type="search"
       />
       <MagnifyingGlassIcon className="absolute left-2 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
       <button
         disabled={loading || searching}
         type="submit"
-        onClick={searchWeather}
-        className="absolute right-1.5 top-1/2 h-fit w-16 -translate-y-1/2 rounded bg-gray-200 p-0.5 text-gray-500 disabled:cursor-not-allowed peer-focus:bg-primary-500 peer-focus:text-white"
+        className="absolute right-1.5 top-1/2 h-fit w-16 -translate-y-1/2 rounded bg-gray-200 p-0.5 text-gray-500 disabled:cursor-not-allowed disabled:opacity-50 peer-focus:bg-primary-500 peer-focus:text-white"
       >
         {searching ? (
           <svg

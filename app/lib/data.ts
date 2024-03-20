@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CurrentWeatherResponse, ForecastResponse } from './types';
 const API_KEY = process.env.API_KEY;
 const API_BASE_URL = 'https://api.openweathermap.org/data/2.5';
+
 type WeatherOrForecastResponse = CurrentWeatherResponse | ForecastResponse;
 
 async function fetchDataFromOpenWeatherMap<T extends WeatherOrForecastResponse>(
@@ -18,7 +19,7 @@ async function fetchDataFromOpenWeatherMap<T extends WeatherOrForecastResponse>(
     return response.data;
   } catch (error: any) {
     console.error(`Error fetching ${endpoint} data:`, error);
-    throw new Error(error.message);
+    throw new Error(error);
   }
 }
 

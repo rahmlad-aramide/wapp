@@ -8,10 +8,7 @@ import CardWrapper from '@/app/ui/dashboard/card-wrapper';
 import SunCard from '@/app/ui/dashboard/sun-card';
 import OverviewCard from '@/app/ui/dashboard/overview-card';
 import { useLoading } from '@/app/contexts/loading-context';
-import {
-  CurrentWeatherResponse,
-  ForecastResponse,
-} from '@/app/lib/types';
+import { CurrentWeatherResponse, ForecastResponse } from '@/app/lib/types';
 import {
   fetchForecastByCityName,
   fetchForecastByCoordinate,
@@ -30,6 +27,7 @@ import TemperaturePieChart from '@/app/ui/dashboard/temperature-pie-chart';
 export default function OverviewContent() {
   const searchParams = useSearchParams();
   const [isClient, setIsClient] = useState(false);
+  const [searching, setSearching] = useState<boolean>(false);
   const { loading, setLoading } = useLoading();
   const [forecastData, setForecastData] = useState<ForecastResponse | null>(
     null,
@@ -47,27 +45,32 @@ export default function OverviewContent() {
     const query = searchParams.get('q')?.toString();
     setLoading(true);
     try {
-      const weatherPromise =
-        lat && lon
-          ? fetchWeatherByCoordinate(lat, lon)
-          : query
-          ? fetchWeatherByCityName(query)
-          : null;
-      const forecastPromise =
-        lat && lon
-          ? fetchForecastByCoordinate(lat, lon)
-          : query
-          ? fetchForecastByCityName(query)
-          : null;
+      const weatherPromise = query
+        ? fetchWeatherByCityName(query)
+        : lat && lon
+        ? fetchWeatherByCoordinate(lat, lon)
+        : null;
+      const forecastPromise = query
+        ? fetchForecastByCityName(query)
+        : lat && lon
+        ? fetchForecastByCoordinate(lat, lon)
+        : null;
       const [weatherResponse, forecastResponse] = await Promise.all([
         weatherPromise,
         forecastPromise,
       ]);
       setWeatherData(weatherResponse);
       setForecastData(forecastResponse);
-    } catch (error: any) {
-      console.error('Error fetching data:', error);
-      notify(error.message, 'error');
+    } catch (error: Error | any) {
+      let errorMessage = 'An error occurred.';
+      if (!error.response) {
+        errorMessage = 'Network error. Please check your internet connection.';
+      } else if (error.response && error.response.status >= 400) {
+        errorMessage = `Error fetching data: ${error.response.statusText}`;
+      } else {
+        console.error('Unexpected error:', error);
+      }
+      notify(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -98,7 +101,7 @@ export default function OverviewContent() {
     getLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   useEffect(() => {
     if (lat != null && lon != null) {
       console.log('in Effect', lat, lon);
@@ -120,7 +123,11 @@ export default function OverviewContent() {
 
   return (
     <main>
-      <Heading searchWeather={searchWeather} />
+      <Heading
+        searchWeather={searchWeather}
+        searching={searching}
+        setSearching={setSearching}
+      />
       <section className="grid grid-cols-12 gap-6">
         <section className="order-2 col-span-12 md:order-1 md:col-span-8">
           <CardWrapper weatherData={weatherData} />
@@ -130,7 +137,9 @@ export default function OverviewContent() {
         </section>
         <section className="relative order-1 col-span-12 h-full w-full overflow-x-hidden rounded-lg bg-white p-4 shadow-lg md:order-2 md:col-span-4">
           <OverviewCard weatherData={weatherData} />
-          <TemperaturePieChart weatherData={weatherData} />
+          <div className={!loading? "overflow-x-auto": ''}>
+            <TemperaturePieChart weatherData={weatherData} />
+          </div>
           {!loading ? (
             <h2
               className={`${inter.className} mt-4 text-sm font-medium text-[#373d3f]`}

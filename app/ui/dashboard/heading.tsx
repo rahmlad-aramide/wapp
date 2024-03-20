@@ -4,8 +4,10 @@ import UnitTab from './unit-tab';
 import { formatDateToLocal } from '@/app/lib/utils';
 import { varela } from '../fonts';
 import LiveTime from './live-time';
+import { Dispatch, SetStateAction } from 'react';
+import { HeadingProps } from '@/app/lib/types';
 
-function Heading({ searchWeather }: { searchWeather: () => void }) {
+function Heading({ searchWeather, searching, setSearching }: HeadingProps) {
   return (
     <section className="mb-4 flex flex-col justify-between lg:flex-row">
       <div className="mb-2 w-full lg:mb-0">
@@ -18,6 +20,7 @@ function Heading({ searchWeather }: { searchWeather: () => void }) {
         <Search
           placeholder="Search city name or post code"
           searchWeather={searchWeather}
+          searching={searching} setSearching={setSearching}
         />
         <UnitTab />
       </div>
