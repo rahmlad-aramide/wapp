@@ -1,74 +1,106 @@
-'use client'
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { memo } from 'react';
+'use client';
+import { useEffect, useRef, useState, memo } from 'react';
+import 'ol/ol.css';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import XYZ from 'ol/source/XYZ';
+import OSM from 'ol/source/OSM';
 
-const containerStyle = {
-  width: '800px',
-  height: '600px',
-};
-
-// Set the initial center position of the map
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
-
-// Define the map type ID
-const mapTypeId = "hybrid";
-
-const googleMapsApiKey: string = 'your_google_maps_api_key';
-const openWeatherMapApiKey: string = 'c47e50f2193381706302c2b9f33a5fcc';
+const API_KEY = process.env.API_KEY;
 
 const WeatherMap: React.FC = () => {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey
-  })
+  const mapRef = useRef<HTMLDivElement>(null); // Ref for the map container
+  const [map, setMap] = useState<Map>();
+  const [layerType, setLayerType] = useState('clouds_new');
 
-  const renderMap = () => {
-    const getTileUrl = (tileCoord: google.maps.Point, zoom: number, overlayType: string): string => {
-      const normalizedCoord = getNormalizedCoord(tileCoord, zoom);
-      if (!normalizedCoord) {
-        return '';
-      }
-      const { x, y } = normalizedCoord;
-      return `https://tile.openweathermap.org/map/${overlayType}/${zoom}/${x}/${y}.png?appid=${openWeatherMapApiKey}`;
-    }
+  useEffect(() => {
+    // Initialize the OpenLayers map object
+    if (!mapRef.current) return;
 
-    const getNormalizedCoord = (coord: google.maps.Point, zoom: number): google.maps.Point | null => {
-      const y = coord.y;
-      let x = coord.x;
-      const tileRange = 1 << zoom;
-      if (y < 0 || y >= tileRange) {
-        return null;
-      }
-      if (x < 0 || x >= tileRange) {
-        x = (x % tileRange + tileRange) % tileRange;
-      }
-      //   return { x: x, y: y };
-      return new google.maps.Point(x, y);;
-    }
+    const initialMap = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({
+          source: new OSM(),
+        }),
+        new TileLayer({
+          opacity: 0.7,
+          source: new XYZ({
+            url: `https://tile.openweathermap.org/map/${layerType}/0/0/0.png?appid=${API_KEY}`,
+          }),
+        }),
+      ],
+      view: new View({
+        center: [8.1677954, 4.2688904],
+        zoom: 2,
+      }),
+    });
 
-    return <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={10}
-      mapTypeId={mapTypeId as google.maps.MapTypeId}
-      onLoad={map => {
-        const weatherLayer = new google.maps.ImageMapType({
-          getTileUrl: (coord, zoom) => getTileUrl(coord, zoom, 'clouds_new'),
-          tileSize: new google.maps.Size(256, 256),
-          opacity: 0.5,
-        });
+    setMap(initialMap);
 
-        map.overlayMapTypes.push(weatherLayer);
-      }}
-    >
-      {/* Child components like markers or InfoWindows */}
-    </GoogleMap>
-  }
+    return () => {
+      initialMap.setTarget(undefined);
+    };
+  }, [layerType]);
 
-  return isLoaded ? renderMap() : null;
-}
+  return (
+    <div>
+      <div className="mb-4 flex flex-row space-x-4">
+        <button
+          className={`px-4 py-2 ${
+            layerType === 'clouds_new'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200'
+          } rounded-md`}
+          onClick={() => setLayerType('clouds_new')}
+        >
+          Clouds
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            layerType === 'precipitation_new'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200'
+          } rounded-md`}
+          onClick={() => setLayerType('precipitation_new')}
+        >
+          Precipitation
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            layerType === 'pressure_new'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200'
+          } rounded-md`}
+          onClick={() => setLayerType('pressure_new')}
+        >
+          Sea Level Pressure
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            layerType === 'wind_new'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200'
+          } rounded-md`}
+          onClick={() => setLayerType('wind_new')}
+        >
+          Wind Speed
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            layerType === 'temp_new'
+              ? 'bg-primary-500 text-white'
+              : 'bg-gray-200'
+          } rounded-md`}
+          onClick={() => setLayerType('temp_new')}
+        >
+          Temperature
+        </button>
+      </div>
+      <div ref={mapRef} className="relative h-screen w-full"></div>;
+    </div>
+  );
+};
 
 export default memo(WeatherMap);
