@@ -1,13 +1,13 @@
 'use server';
 import axios from 'axios';
-import { ClimateResponse, CurrentWeatherResponse, ForecastResponse } from './types';
+import { CurrentWeatherResponse, ForecastResponse } from './types';
 const API_KEY = process.env.API_KEY;
-const API_BASE_URL = 'https://pro.openweathermap.org/data/2.5';
+const API_BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
-type WeatherOrForecastResponse = CurrentWeatherResponse | ForecastResponse | ClimateResponse;
+type WeatherOrForecastResponse = CurrentWeatherResponse | ForecastResponse;
 
 async function fetchDataFromOpenWeatherMap<T extends WeatherOrForecastResponse>(
-  endpoint: 'weather' | 'forecast' | 'forecast/climate',
+  endpoint: 'weather' | 'forecast',
   query: { lat?: number; lon?: number; city?: string | null }
 ): Promise<T> {
   const { lat, lon, city } = query;
@@ -45,8 +45,3 @@ export const fetchForecastByCityName = (
 ): Promise<ForecastResponse> =>
   fetchDataFromOpenWeatherMap<ForecastResponse>('forecast', { city });
 
-  export const fetchClimateByCoordinate = (
-    lat: number,
-    lon: number
-  ): Promise<ClimateResponse> =>
-    fetchDataFromOpenWeatherMap<ClimateResponse>('forecast/climate', { lat, lon });

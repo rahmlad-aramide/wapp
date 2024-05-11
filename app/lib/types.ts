@@ -159,3 +159,141 @@ export interface SunCardTimeProps {
   Sunset: number;
 }
 export type TimeUnit = 'seconds' | 'minutes' | 'hours';
+
+export interface SolarIrradianceDataResponse {
+  lat: number
+  lon: number
+  date: string
+  tz: string
+  sunrise: string
+  sunset: string
+  irradiance: Irradiance
+}
+
+export interface Irradiance {
+  daily: IrradianceDaily[]
+  hourly: IrradianceHourly[]
+}
+
+export interface IrradianceDaily {
+  clear_sky: IrradianceClearSky
+  cloudy_sky: IrradianceCloudySky
+}
+
+export interface IrradianceClearSky {
+  ghi: number
+  dni: number
+  dhi: number
+}
+
+export interface IrradianceCloudySky {
+  ghi: number
+  dni: number
+  dhi: number
+}
+
+export interface IrradianceHourly {
+  hour: number
+  clear_sky: IrradianceClearSky2
+  cloudy_sky: IrradianceCloudySky2
+}
+
+export interface IrradianceClearSky2 {
+  ghi: number
+  dni: number
+  dhi: number
+}
+
+export interface IrradianceCloudySky2 {
+  ghi: number
+  dni: number
+  dhi: number
+}
+
+export interface PollutionDataResponse {
+  coord: number[]
+  list: PollutionDataList[]
+}
+
+export interface PollutionDataList {
+  dt: number
+  main: PollutionDataMain
+  components: PollutionDataComponents
+}
+
+export interface PollutionDataMain {
+  aqi: number
+}
+
+export interface PollutionDataComponents {
+  co: number
+  no: number
+  no2: number
+  o3: number
+  so2: number
+  pm2_5: number
+  pm10: number
+  nh3: number
+}
+
+// Climate forecast
+export interface ClimateResponse {
+  city: ClimateCity
+  code: string
+  message: number
+  cnt: number
+  list: ClimateList[]
+}
+
+export interface ClimateCity {
+  id: number
+  name: string
+  coord: ClimateCoord
+  country: string
+  population: number
+  timezone: number
+}
+
+export interface ClimateCoord {
+  lon: number
+  lat: number
+}
+
+export interface ClimateList {
+  dt: number
+  sunrise: number
+  sunset: number
+  temp: ClimateTemp
+  feels_like: ClimateFeelsLike
+  pressure: number
+  humidity: number
+  weather: ClimateWeather[]
+  speed: number
+  deg: number
+  clouds: number
+  rain?: number
+}
+
+export interface ClimateTemp {
+  day: number
+  min: number
+  max: number
+  night: number
+  eve: number
+  morn: number
+}
+
+export interface ClimateFeelsLike {
+  day: number
+  night: number
+  eve: number
+  morn: number
+}
+
+export interface ClimateWeather {
+  id: number
+  main: string
+  description: string
+  icon: string
+}
+

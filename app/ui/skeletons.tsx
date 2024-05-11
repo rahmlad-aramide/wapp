@@ -4,7 +4,7 @@ export const shimmer =
 export function CardSkeleton() {
   return (
     <div
-      className={`${shimmer} relative flex rounded-xl bg-white p-2 shadow-lg md:px-6`}
+      className={`${shimmer} relative flex overflow-hidden rounded-xl bg-white p-2 shadow-lg md:px-6`}
     >
       <div className="my-auto h-16 w-16 rounded-lg bg-gray-200"></div>
       <div className="ml-8 flex flex-col items-start justify-center py-8">
@@ -28,7 +28,9 @@ export function CardsSkeleton() {
 
 export function HeadingSkeleton() {
   return (
-    <section className={`${shimmer} relative mb-4 flex justify-between`}>
+    <section
+      className={`${shimmer} relative mb-4 flex justify-between overflow-hidden`}
+    >
       <div>
         <div className="mb-1 h-5 w-32 rounded-md bg-gray-200"></div>
         <div className="mt-2 h-8 w-48 rounded-md bg-gray-200"></div>
@@ -60,7 +62,7 @@ export function TemperatureAreaChartSkeleton() {
 export function TemperaturePieChartSkeleton() {
   return (
     <div
-      className={`${shimmer} relative ml-2 lg:mx-auto mt-4 flex max-w-[280px] space-x-2`}
+      className={`${shimmer} relative ml-2 mt-4 flex max-w-[280px] space-x-2 overflow-hidden lg:mx-auto`}
     >
       <div className="mr-4 w-1/2 max-w-[100px] rounded-full bg-gray-200 p-4">
         <div className="mx-auto aspect-square w-full rounded-full bg-white"></div>
@@ -77,7 +79,9 @@ export function TemperaturePieChartSkeleton() {
 
 export function OverviewCardSkeleton() {
   return (
-    <section className={`${shimmer} relative flex flex-col border-b-2 pb-4`}>
+    <section
+      className={`${shimmer} relative flex flex-col overflow-hidden border-b-2 pb-4`}
+    >
       <div className="flex items-center justify-between">
         <div>
           <div className="mb-2 h-6 w-28 rounded-md bg-gray-200"></div>{' '}
@@ -105,7 +109,7 @@ export function OverviewCardSkeleton() {
 export function SunCardSkeleton() {
   return (
     <section
-      className={`${shimmer} bg-gradient col-span-4 mb-2 mt-2.5 h-fit w-full rounded-lg bg-gradient-to-br from-primary-500 via-[#F19C69] via-40% to-[#EB4D4B] p-2 shadow-lg`}
+      className={`${shimmer} bg-gradient relative col-span-4 mb-2 mt-2.5 h-fit w-full overflow-hidden rounded-lg bg-gradient-to-br from-primary-500 via-[#F19C69] via-40% to-[#EB4D4B] p-2 shadow-lg`}
     >
       <div className="flex items-center justify-between rounded border border-white/50 bg-white/30 px-3 py-2 text-gray-800">
         <div className="flex items-center">
@@ -123,7 +127,9 @@ export function SunCardSkeleton() {
 export function SunCardsSkeleton() {
   return (
     <>
-      <div className={`${shimmer} mt-4 h-4 w-1/2 bg-gray-200`}></div>
+      <div
+        className={`${shimmer} relative mt-4 h-4 w-1/2 overflow-hidden bg-gray-200`}
+      ></div>
       <SunCardSkeleton />
       <SunCardSkeleton />
     </>
@@ -147,6 +153,84 @@ export default function DashboardSkeleton() {
           <SunCardsSkeleton />
         </section>
       </section>
+    </>
+  );
+}
+
+export function GreenergyCard() {
+  return (
+    <div
+      className={`${shimmer} relative flex min-h-[300px] overflow-hidden rounded-lg bg-white shadow-lg`}
+    >
+      <div className="h-full w-full rounded-lg bg-gray-200"></div>
+    </div>
+  );
+}
+export function GreenergySkeleton() {
+  return (
+    <>
+      <div className={`${shimmer} relative mb-6 space-y-1.5 overflow-hidden`}>
+        <div className="h-8 w-8 rounded bg-gray-200"></div>
+        <div className="h-4 w-full max-w-[140px] rounded bg-gray-200"></div>
+        <div className="mb-6 h-7 rounded bg-gray-200 text-xl font-medium"></div>
+      </div>
+      <section className="grid min-h-screen grid-cols-1 gap-5 md:grid-cols-2">
+        <GreenergyCard />
+        <GreenergyCard />
+        <GreenergyCard />
+        <GreenergyCard />
+        <GreenergyCard />
+        <GreenergyCard />
+      </section>
+    </>
+  );
+}
+
+export function CcalendarSkeleton() {
+  return (
+    <>
+      <h1
+        className={`${shimmer} relative mb-3 h-7 w-full max-w-[500px] overflow-hidden bg-gray-200`}
+      ></h1>
+      <div className={`${shimmer} relative overflow-hidden`}>
+        <div className="mb-3 hidden grid-cols-3 md:grid md:grid-cols-7">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <div
+              key={index}
+              className="min-h-[50px] border border-gray-300 bg-gray-200 text-center first:rounded-l-lg last:rounded-r-lg"
+            ></div>
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-y-3 rounded-lg md:grid-cols-7">
+          {Array.from({ length: 30 }).map((_, index) => (
+            <div
+              key={index}
+              className={`min-h-[200px] w-full border border-gray-300 bg-gray-200 
+                                        ${
+                                          index % 3 === 0
+                                            ? 'rounded-l-lg md:rounded-none'
+                                            : ''
+                                        }
+                                        ${
+                                          index % 3 === 2
+                                            ? 'rounded-r-lg md:rounded-none'
+                                            : ''
+                                        }
+                                        ${
+                                          index % 7 === 0
+                                            ? 'md:rounded-l-lg'
+                                            : ''
+                                        }
+                                        ${
+                                          index % 7 === 6
+                                            ? 'md:rounded-r-lg'
+                                            : ''
+                                        }`}
+            ></div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-5 min-h-[350px] rounded-lg border bg-gray-200"></div>
     </>
   );
 }

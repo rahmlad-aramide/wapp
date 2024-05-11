@@ -104,7 +104,6 @@ export default function OverviewContent() {
 
   useEffect(() => {
     if (lat != null && lon != null) {
-      console.log('in Effect', lat, lon);
       fetchData(lat, lon);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
